@@ -1,0 +1,70 @@
+<project name="doorsystemsignservice" default="tarball" basedir=".">
+	<description>
+        supervisor build file
+    </description>
+
+	
+	<property name="src" location="src"/>
+	<property name="build" location="build"/>
+	<property name="dist"  location="dist"/>
+	<property name="lib"  location="lib"/>
+
+	<target name="init">
+		<!-- Create the time stamp -->
+		<tstamp/>
+		<!-- Create the build directory structure used by compile -->
+		<mkdir dir="${build}"/>
+	</target>
+
+	<target name="compile" depends="init"
+        description="compile the source " >
+
+		<javac debug="true" srcdir="${src}" destdir="${build}" target="1.5">
+			<classpath>
+				<fileset dir="${lib}">
+					<include name="**/*.jar"/>
+				</fileset>
+			</classpath>
+		</javac>
+	</target>
+
+	<target name="jar" depends="compile"
+        description="generate the distribution" >
+		<!-- Create the distribution directory -->
+		<mkdir dir="${dist}/doorsystemsignservice"/>
+		<jar jarfile="${dist}/${ant.project.name}/dsss.jar" basedir="${build}">
+			<manifest>
+				<attribute name="Main-Class" value="org.capybara.dsss/DoorSystemSignService"/>
+			</manifest>
+		</jar>
+		
+	</target>
+
+	<target name="tarball" depends="jar" description="Creates the distribution tarball">
+		<copy file="log4j.properties" todir="${dist}/${ant.project.name}/" />
+		<copy file="doorsystemsignservice.properties-dist" todir="${dist}/${ant.project.name}/" />
+		<mkdir dir="${dist}/${ant.project.name}/logs" />
+		<mkdir dir="${dist}/${ant.project.name}/bin" />
+		<mkdir dir="${dist}/${ant.project.name}/lib" />
+		<copy todir="${dist}/${ant.project.name}/init.d">
+			<fileset dir="init.d" includes="**" />
+		</copy>
+		<copy todir="${dist}/${ant.project.name}/lib">
+			<fileset dir="lib" includes="**" />
+		</copy>
+		<copy todir="${dist}/${ant.project.name}/bin">
+			<fileset dir="linux-i386-bin" includes="**" />
+		</copy>
+		<chmod perm="0755" file="${dist}/${ant.project.name}/init.d/doorsignservice" />
+		<chmod perm="0755" file="${dist}/${ant.project.name}/bin/jsvc" />
+		
+		<tar destfile="${dist}/${ant.project.name}.tar.gz" compression="gzip" basedir="${dist}" includes="${ant.project.name}/**" longfile="gnu"/>
+	</target>
+
+	<target name="clean"
+        description="clean up" >
+		<!-- Delete the ${build} and ${dist} directory trees -->
+		<delete dir="${build}"/>
+		<delete dir="${dist}"/>
+	</target>
+</project>

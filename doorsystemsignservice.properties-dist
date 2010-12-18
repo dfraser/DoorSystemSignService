@@ -1,0 +1,10 @@
+# configuration file for door system sign service
+
+ledSignServiceUrl=http://192.168.111.4:8080/signservice/
+
+amqp.host=192.168.111.14
+amqp.port=5672
+amqp.virtualHost=/
+amqp.username=SECRET
+amqp.password=NOT_TELLING
+amqp.exchangeName=door.entry
