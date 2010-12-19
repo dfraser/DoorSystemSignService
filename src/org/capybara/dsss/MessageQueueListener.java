@@ -16,11 +16,14 @@ import com.rabbitmq.client.QueueingConsumer;
 
 public class MessageQueueListener implements Runnable {
 
-	private static Logger log = Logger.getLogger(MessageQueueListener.class);
-	private static LedSignWriter sign = new LedSignWriter("http://192.168.111.4:8080/signservice/");
+	private static final Logger log = Logger.getLogger(MessageQueueListener.class);
+	private final LedSignWriter sign;
 
+	private final DoorSystemSignServiceProperties properties;
+	
 	public MessageQueueListener() {
-		// set up rabbitmq
+		properties = DoorSystemSignServiceProperties.getInstance();
+		sign = new LedSignWriter(properties.getLedSignServiceUrl());
 	}
 
 	@Override
@@ -28,14 +31,14 @@ public class MessageQueueListener implements Runnable {
 		Connection conn = null;
 		Channel channel = null;
 		try {
-			final String exchangeName = "door.entry";
+			final String exchangeName = properties.getAmqpExchange();
 			log.debug("connecting to amqp server");
 			ConnectionFactory factory = new ConnectionFactory();
-			factory.setUsername("ledsign");
-			factory.setPassword("blinkielights");
-			factory.setVirtualHost("/");
-			factory.setHost("192.168.111.14");
-			factory.setPort(5672);
+			factory.setUsername(properties.getAmqpUsername());
+			factory.setPassword(properties.getAmqpPassword());
+			factory.setVirtualHost(properties.getAmqpVirtualHost());
+			factory.setHost(properties.getAmqpHost());
+			factory.setPort(properties.getAmqpPort());
 			conn = factory.newConnection();
 
 			channel = conn.createChannel();

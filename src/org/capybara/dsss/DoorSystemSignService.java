@@ -1,7 +1,5 @@
 package org.capybara.dsss;
 
-import java.io.FileInputStream;
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 

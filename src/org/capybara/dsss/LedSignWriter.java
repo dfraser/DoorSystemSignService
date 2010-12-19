@@ -11,10 +11,19 @@ public class LedSignWriter {
 	private static Logger log = Logger.getLogger(LedSignWriter.class);
 	private String ledSignServiceUrl;
 	
+	/**
+	 * Writes a message on the Hacklab LED sign using St3fan's web service.
+	 * 
+	 * @param ledSignServiceUrl
+	 */
 	public LedSignWriter(String ledSignServiceUrl) {
 		this.ledSignServiceUrl = ledSignServiceUrl;
 	}
 	
+	/**
+	 * Handle a {@link DoorAccessEvent} by writing a message on the LED sign.
+	 * @param event
+	 */
 	public void doorActionEvent(DoorAccessEvent event) {
 		log.debug("led sign event gotten!");
 		String message;

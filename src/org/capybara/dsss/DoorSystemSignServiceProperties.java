@@ -11,12 +11,15 @@ public class DoorSystemSignServiceProperties {
 	private final String amqpVirtualHost;
 	private final String amqpUsername;
 	private final String amqpPassword;
-	private final String amqpQueue;
+	private final String amqpExchange;
 	private final String ledSignServiceUrl;
 	
-	private static Properties properties;
-	private DoorSystemSignServiceProperties instance;
+	private Properties properties;
+	private static DoorSystemSignServiceProperties instance;
 	
+	/**
+	 * Singleton class to provide configuration properties to the application.
+	 */
 	private DoorSystemSignServiceProperties() { 		
 		properties = new Properties();
 		try {
@@ -48,8 +51,8 @@ public class DoorSystemSignServiceProperties {
 			throw new IllegalArgumentException("property amqp.password cannot be blank");
 		}
 		
-		this.amqpQueue = properties.getProperty("amqp.exchangeName");
-		if (this.amqpQueue == null) {
+		this.amqpExchange = properties.getProperty("amqp.exchangeName");
+		if (this.amqpExchange == null) {
 			throw new IllegalArgumentException("property amqp.exchangeName cannot be blank");
 		}
 		
@@ -65,7 +68,11 @@ public class DoorSystemSignServiceProperties {
 		
 	}
 	
-	public DoorSystemSignServiceProperties getInstance() {
+	/**
+	 * Get an instance of this singleton class.
+	 * @return a {@link DoorSystemSignServiceProperties} object
+	 */
+	public static DoorSystemSignServiceProperties getInstance() {
 		if (instance == null) {
 			instance = new DoorSystemSignServiceProperties();
 		}
@@ -92,8 +99,8 @@ public class DoorSystemSignServiceProperties {
 		return amqpPassword;
 	}
 
-	public String getAmqpQueue() {
-		return amqpQueue;
+	public String getAmqpExchange() {
+		return amqpExchange;
 	}
 
 	public String getLedSignServiceUrl() {
